@@ -1,11 +1,13 @@
-# Block web access to .git directory
+# Serve index.html / index.php by default
+DirectoryIndex index.html index.php
+
+# Block web access to hidden files (.git, etc.) except .well-known
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^\.git(/.*)?$ - [F,L]
+    RewriteRule (^|/)\.(?!well-known)[^/]+ - [F,L]
 </IfModule>
 
-# Block direct access to admin config
-<Files "config.php">
-    Order allow,deny
-    Deny from all
-</Files>
+# Protect admin config & data from direct web access
+<FilesMatch "^(config\.php|emails\.json|otp-debug\.log)$">
+    Require all denied
+</FilesMatch>
