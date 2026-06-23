@@ -1,0 +1,11 @@
+# Block web access to .git directory
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.git(/.*)?$ - [F,L]
+</IfModule>
+
+# Block direct access to admin config
+<Files "config.php">
+    Order allow,deny
+    Deny from all
+</Files>
