@@ -1,0 +1,23 @@
+# Admin credentials — NEVER COMMIT
+admin/config.php
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Uploaded admin-preview screenshots (regenerate locally)
+assets/images/admin-previews/
+
+# Temp
+tmp/
+node_modules/
+package-lock.json

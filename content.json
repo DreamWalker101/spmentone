@@ -1,0 +1,56 @@
+{
+  "global": {
+    "phone": "(03) 9583 5033",
+    "phoneDisplay": "9583 5033",
+    "email": "principal@spmentone.catholic.edu.au",
+    "address": "16 Childers Street, Mentone VIC 3194",
+    "addressShort": "16 Childers Street, Mentone, VIC 3194",
+    "facebookUrl": "https://www.facebook.com/p/St-Patricks-Primary-Mentone-100063856583905/",
+    "instagramUrl": "https://www.instagram.com/stpatricksmentone/",
+    "principalName": "Principal",
+    "officeHours": "Monday to Friday · 8:00am – 4:00pm",
+    "footerTagline": "A community where every child is known, supported and inspired to flourish.",
+    "newsletterUrl": "",
+    "annualReportUrl": ""
+  },
+  "homepage": {
+    "aboutTagline": "About St Patrick's",
+    "aboutHeading": "Cultivating Faith-Centered Learning and Community Engagement",
+    "aboutBody": "St. Patrick's, situated in the Archdiocese of Melbourne, offers a transformative educational experience rooted in Catholic values. Our nurturing environment encourages students to grow spiritually, academically, and personally. Join our inclusive community where faith, action, and relationships flourish.",
+    "contactHeading": "Get in Touch with St. Patrick's"
+  },
+  "about": {
+    "visionLabel": "Our School Vision",
+    "introLabel": "Introducing Our Institution",
+    "specialistHeading": "Specialist Programs",
+    "extraCurricularHeading": "Extra Curricular Activities",
+    "supportHeading": "Support and Intervention Programs",
+    "facilitiesHeading": "Facilities",
+    "crestHeading": "The Crest of St Patrick"
+  },
+  "community": {
+    "newsletterHeading": "Current Newsletter",
+    "archiveHeading": "Newsletter Archive",
+    "calendarHeading": "Calendar",
+    "pandfHeading": "P & F Association",
+    "oshcHeading": "Out of Hours Care Program"
+  },
+  "curriculum": {
+    "reHeading": "Religious Education"
+  },
+  "enrolments": {
+    "welcomeHeading": "Welcome to St Patrick's Catholic Primary School. We hope that we can begin a positive partnership with you and your child focused on the development of your child.",
+    "prep2028": "Letters of offer for Prep 2028 will be advised at the end of April 2027. The unsuccessful applications will stay on the waitlist and may receive second or third round offers later in the year.",
+    "prepNote": "Please note, applications for Prep are accepted the year before a child is due to start school.",
+    "formHeading": "Enrolment Forms for St. Patrick's Prep",
+    "handbookHeading": "Parent Handbook Request Form",
+    "boundaryHeading": "Map of Enrolment Boundary",
+    "infoHeading": "ENROLMENT INFORMATION"
+  },
+  "location": {
+    "staffContactsHeading": "Staff Contacts:"
+  },
+  "parish": {
+    "massTimesHeading": "Times of Celebration of Masses and Sacraments"
+  }
+}
