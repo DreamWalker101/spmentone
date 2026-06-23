@@ -6,6 +6,56 @@ session_start([
     'cookie_secure'   => true,
     'cookie_samesite' => 'Strict',
 ]);
+
+$action     = $_GET['action'] ?? '';
+$emailsFile = __DIR__ . '/emails.json';
+
+// ── Email management (auth required) ────────────────────────────────────────
+if (in_array($action, ['get_emails', 'add_email', 'remove_email'], true)) {
+    if (!isset($_SESSION['pp_auth'])) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+        exit;
+    }
+
+    $emails = file_exists($emailsFile)
+        ? (json_decode(file_get_contents($emailsFile), true) ?: [])
+        : [];
+
+    if ($action === 'get_emails') {
+        echo json_encode($emails);
+        exit;
+    }
+
+    $body  = json_decode(file_get_contents('php://input'), true) ?: [];
+    $email = strtolower(trim($body['email'] ?? ''));
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid email address']);
+        exit;
+    }
+
+    if ($action === 'add_email') {
+        if (in_array($email, array_map('strtolower', $emails), true)) {
+            echo json_encode(['success' => true, 'message' => 'Already in list']);
+            exit;
+        }
+        $emails[] = $email;
+        file_put_contents($emailsFile, json_encode(array_values($emails), JSON_PRETTY_PRINT));
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    if ($action === 'remove_email') {
+        $emails = array_values(array_filter($emails, fn($e) => strtolower($e) !== $email));
+        file_put_contents($emailsFile, json_encode($emails, JSON_PRETTY_PRINT));
+        echo json_encode(['success' => true]);
+        exit;
+    }
+}
+
+// ── All remaining actions require auth ───────────────────────────────────────
 if (!isset($_SESSION['pp_auth'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Unauthorized']);
@@ -14,7 +64,7 @@ if (!isset($_SESSION['pp_auth'])) {
 
 $contentFile = __DIR__ . '/../content.json';
 $imagesDir   = __DIR__ . '/../assets/images/';
-$action      = $_GET['action'] ?? '';
+// $action already set above
 
 function deepMerge($base, $override) {
     if (!is_array($base)) return $override;

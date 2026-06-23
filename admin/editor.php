@@ -497,7 +497,7 @@ function v($val, $default = '') { return htmlspecialchars($val ?? $default, ENT_
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Preview Site
         </a>
-        <a href="?logout=1"
+        <a href="index.php?logout=1"
            style="display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:13px;color:rgba(30,58,95,0.55);text-decoration:none;padding:6px 14px;border-radius:8px;transition:background 0.15s,color 0.15s;"
            onmouseover="this.style.background='#FEE2E2';this.style.color='#DC2626';"
            onmouseout="this.style.background='transparent';this.style.color='rgba(30,58,95,0.55)';">
@@ -523,6 +523,7 @@ function v($val, $default = '') { return htmlspecialchars($val ?? $default, ENT_
         'enrolments'  => 'Enrolments',
         'contact'     => 'Contact',
         'policies'    => 'Policies',
+        'access'      => 'Access',
       ];
       $first = true;
       foreach ($tabs as $key => $label):
@@ -2049,6 +2050,40 @@ function v($val, $default = '') { return htmlspecialchars($val ?? $default, ENT_
       </div><!-- /page-editor-split -->
     </div>
 
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ACCESS TAB                                              -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div id="tab-access" class="tab-panel">
+      <div style="max-width:680px;">
+
+        <div class="section-card">
+          <div class="section-title">Allowed Email Addresses</div>
+          <div class="section-subtitle">Only these addresses can receive a login code. Add or remove as needed.</div>
+
+          <!-- Current list -->
+          <div id="access-email-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+            <div style="color:rgba(30,58,95,0.4);font-size:13px;">Loading&hellip;</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Add email -->
+          <div style="display:flex;gap:10px;align-items:flex-end;">
+            <div style="flex:1;">
+              <label class="field-label" for="access-new-email">Add Email Address</label>
+              <input type="email" id="access-new-email" class="field-input" placeholder="name@example.com"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();accessAddEmail();}">
+            </div>
+            <button class="save-btn" style="flex-shrink:0;" onclick="accessAddEmail()">Add</button>
+          </div>
+          <p class="field-hint" style="margin-top:8px;">Only add email addresses of people who should have admin access to this site.</p>
+        </div>
+
+      </div>
+    </div><!-- /tab-access -->
+
+
   </div><!-- /main content -->
 
   <!-- ═══ MEDIA PICKER MODAL ═══ -->
@@ -2079,18 +2114,7 @@ function v($val, $default = '') { return htmlspecialchars($val ?? $default, ENT_
 
 <script>
 // ── Tab switching ─────────────────────────────────────────────────────────────
-function switchTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  btn.classList.add('active');
-  // Auto-activate first section nav btn if none active
-  const tab = document.getElementById('tab-' + name);
-  if (tab && !tab.querySelector('.section-nav-btn.active')) {
-    const first = tab.querySelector('.section-nav-btn');
-    if (first) first.click();
-  }
-}
+// (defined later alongside Access tab logic)
 
 // ── Section switching ─────────────────────────────────────────────────────────
 function showSection(tabId, sectionId, anchorId, btn) {
@@ -2516,6 +2540,93 @@ async function saveTab(tab, event) {
 
   btn.disabled = false;
   btn.textContent = orig;
+}
+
+// ── Access tab — email management ────────────────────────────────────────────
+async function accessLoadEmails() {
+  const list = document.getElementById('access-email-list');
+  if (!list) return;
+  try {
+    const res  = await fetch('api.php?action=get_emails');
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      list.innerHTML = '<div style="color:rgba(30,58,95,0.4);font-size:13px;padding:8px 0;">No emails added yet.</div>';
+      return;
+    }
+    list.innerHTML = data.map(email => `
+      <div style="display:flex;align-items:center;justify-content:space-between;background:#ECEBE6;border-radius:10px;padding:10px 14px;">
+        <span style="font-size:14px;color:#1F4C23;font-family:'Inter',sans-serif;">${escHtml(email)}</span>
+        <button onclick="accessRemoveEmail('${escHtml(email)}')"
+          style="background:transparent;border:1.5px solid #E2E6EA;border-radius:8px;padding:4px 12px;font-size:12px;color:#9CA3AF;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color 0.15s,color 0.15s;"
+          onmouseover="this.style.borderColor='#DC2626';this.style.color='#DC2626';"
+          onmouseout="this.style.borderColor='#E2E6EA';this.style.color='#9CA3AF';">
+          Remove
+        </button>
+      </div>`).join('');
+  } catch (e) {
+    list.innerHTML = '<div style="color:#B91C1C;font-size:13px;">Could not load email list.</div>';
+  }
+}
+
+async function accessAddEmail() {
+  const input = document.getElementById('access-new-email');
+  const email = input.value.trim();
+  if (!email) return;
+  try {
+    const res  = await fetch('api.php?action=add_email', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      input.value = '';
+      showToast('Email added', true);
+      accessLoadEmails();
+    } else {
+      showToast(data.error || 'Could not add email', false);
+    }
+  } catch (e) {
+    showToast('Network error', false);
+  }
+}
+
+async function accessRemoveEmail(email) {
+  if (!confirm(`Remove ${email} from the allowed list?`)) return;
+  try {
+    const res  = await fetch('api.php?action=remove_email', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Email removed', true);
+      accessLoadEmails();
+    } else {
+      showToast(data.error || 'Could not remove email', false);
+    }
+  } catch (e) {
+    showToast('Network error', false);
+  }
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Tab switching (includes Access tab load trigger) ─────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  const tab = document.getElementById('tab-' + name);
+  if (tab && !tab.querySelector('.section-nav-btn.active')) {
+    const first = tab.querySelector('.section-nav-btn');
+    if (first) first.click();
+  }
+  if (name === 'access') accessLoadEmails();
 }
 
 // ── Init picker previews on load ──────────────────────────────────────────────

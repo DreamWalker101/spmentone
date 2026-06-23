@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/USERNAME/public_html/
+    - /bin/cp -R . $DEPLOYPATH
+    - /bin/rm -f $DEPLOYPATH/.cpanel.yml
+    - /bin/rm -rf $DEPLOYPATH/.git

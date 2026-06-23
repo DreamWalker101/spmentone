@@ -1,5 +1,7 @@
 # Admin credentials — NEVER COMMIT
 admin/config.php
+admin/emails.json
+admin/otp-debug.log
 
 # OS
 .DS_Store
