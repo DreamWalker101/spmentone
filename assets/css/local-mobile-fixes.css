@@ -1,0 +1,145 @@
+/* Local mobile fallbacks for UI that originally depended on remote theme fonts. */
+#preload {
+    display: none !important;
+}
+
+/* Keep the locally downloaded first hero visible while Revolution Slider loads. */
+.home #rev_slider_1_1_wrapper[style*="visibility:hidden"],
+.home #rev_slider_1_1_wrapper[style*="visibility: hidden"] {
+    visibility: visible !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
+        url("../images/L1050655-scaled.jpg") !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+@media (max-width: 1024px) {
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li,
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li > a {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .home #rev_slider_1_1_wrapper[style*="visibility:hidden"],
+    .home #rev_slider_1_1_wrapper[style*="visibility: hidden"] {
+        min-height: calc(100vh - 38px) !important;
+    }
+
+    #toolbar {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    #toolbar .elementor-container {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    #toolbar .elementor-element-3993533,
+    #toolbar .elementor-element-42f2c77 {
+        display: block !important;
+        width: 50% !important;
+    }
+
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li {
+        display: none !important;
+    }
+
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li:nth-child(2) {
+        display: inline-flex !important;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li:nth-child(2) > span {
+        display: none !important;
+    }
+
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li:nth-child(2) > span {
+        display: inline-flex !important;
+        margin-right: 6px;
+    }
+
+    #toolbar .elementor-element-6cd4abb .thim-header-info > li:nth-child(2) .tk-phone {
+        display: inline-block !important;
+        font-family: "thim-ekits" !important;
+        font-size: 14px !important;
+        line-height: 1 !important;
+    }
+
+    #toolbar .thim-link-login,
+    #toolbar .thim-link-login a.login {
+        display: block !important;
+        visibility: visible !important;
+        font-size: 13px !important;
+    }
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon {
+    display: block !important;
+    position: relative !important;
+    width: 30px !important;
+    height: 28px !important;
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon::before {
+    content: "\00D7" !important;
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    color: var(--thim-mobile-menu-text-color, #333);
+    font: 32px/26px Arial, sans-serif !important;
+    text-align: center;
+    z-index: 2;
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon span.icon-bar {
+    display: none !important;
+    position: absolute !important;
+    left: 4px !important;
+    width: 22px !important;
+    height: 2px !important;
+    background: #333 !important;
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon span.icon-bar:nth-child(1) {
+    top: 13px !important;
+    transform: rotate(-45deg) !important;
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon span.icon-bar:nth-child(2) {
+    opacity: 0 !important;
+}
+
+.mobile-menu-wrapper .menu-mobile-effect.navbar-toggle.close-icon span.icon-bar:nth-child(3) {
+    top: 13px !important;
+    transform: rotate(45deg) !important;
+}
+
+.mobile-menu-wrapper .icon-menu-back::before {
+    content: "\2039" !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    vertical-align: -2px;
+}
+
+.mobile-menu-wrapper ul li .icon-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.mobile-menu-wrapper ul li .icon-toggle > * {
+    display: none !important;
+}
+
+.mobile-menu-wrapper ul li .icon-toggle::after {
+    display: block !important;
+    content: "\203A" !important;
+    color: var(--thim-mobile-menu-text-color, #333);
+    font: 26px/1 Arial, sans-serif !important;
+}

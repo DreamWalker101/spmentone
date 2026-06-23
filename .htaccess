@@ -1,0 +1,13 @@
+# Serve index.html / index.php by default
+DirectoryIndex index.html index.php
+
+# Block web access to hidden files (.git, etc.) except .well-known
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (^|/)\.(?!well-known)[^/]+ - [F,L]
+</IfModule>
+
+# Protect admin config & data from direct web access
+<FilesMatch "^(config\.php|emails\.json|otp-debug\.log)$">
+    Require all denied
+</FilesMatch>
