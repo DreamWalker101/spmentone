@@ -55,13 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fromEmail = OTP_FROM_EMAIL;
                 $subject   = "Your admin login code — {$siteName}";
                 $body      = "Your one-time login code is:\n\n    {$otp}\n\nThis code expires in 10 minutes.\nDo not share it with anyone.\n\n\xe2\x80\x94 {$siteName}";
-                $headers   = "From: {$siteName} <{$fromEmail}>\r\nContent-Type: text/plain; charset=UTF-8";
+                $headers   = "From: {$siteName} <{$fromEmail}>\r\n"
+                           . "Reply-To: {$fromEmail}\r\n"
+                           . "Content-Type: text/plain; charset=UTF-8";
 
                 if (defined('DEV_MODE') && DEV_MODE) {
                     $logLine = date('Y-m-d H:i:s') . " | email={$email} | otp={$otp}\n";
                     file_put_contents(__DIR__ . '/otp-debug.log', $logLine, FILE_APPEND);
                 } else {
-                    mail($email, $subject, $body, $headers);
+                    // -f sets the envelope sender so Exim uses a valid local
+                    // return-path; without it PHP mail() is silently dropped.
+                    mail($email, $subject, $body, $headers, '-f ' . $fromEmail);
                 }
             }
             // Same response whether email is allowed or not (prevents enumeration)
